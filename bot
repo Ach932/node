@@ -1,0 +1,92 @@
+const qrcode = require("qrcode-terminal");
+const { Client, LocalAuth } = require("whatsapp-web.js");
+const cron = require("node-cron");
+
+// Liste des contacts à qui envoyer le message (mettre les numéros en format international)
+const contacts = ["+1234567890", "+0987654321"];
+
+// Message à envoyer
+const message = "Bonjour ! Ceci est un message automatique envoyé chaque jour 😊.";
+
+// Création du client WhatsApp
+const client = new Client({
+    authStrategy: new LocalAuth(), // Garde la session active
+    puppeteer: { headless: true } // Exécute Chrome en arrière-plan
+});
+
+// Afficher le QR code pour la première connexion
+client.on("qr", (qr) => {
+    console.log("Scannez ce QR code avec votre téléphone WhatsApp:");
+    qrcode.generate(qr, { small: true });
+});
+
+// Confirmer la connexion
+client.on("ready", () => {
+    console.log("✅ Bot WhatsApp est prêt !");
+    
+    // Programmer l'envoi des messages tous les jours à 8h00
+    cron.schedule("0 8 * * *", () => {
+        envoyerMessages();
+    }, {
+        timezone: "Europe/Paris" // Modifier selon ton fuseau horaire
+    });
+});
+
+// Fonction pour envoyer les messages
+function envoyerMessages() {
+    console.log("📤 Envoi des messages...");
+    contacts.forEach((numero) => {
+        client.sendMessage(numero + "@c.us", message)
+            .then(() => console.log(`✅ Message envoyé à ${numero}`))
+            .catch(err => console.error(`❌ Erreur envoi à ${numero}:`, err));
+    });
+}
+
+// Démarrer le bot
+client.initialize();
+const qrcode = require("qrcode-terminal");
+const { Client, LocalAuth } = require("whatsapp-web.js");
+const cron = require("node-cron");
+
+// Liste des contacts à qui envoyer le message (mettre les numéros en format international)
+const contacts = ["+1234567890", "+0987654321"];
+
+// Message à envoyer
+const message = "Bonjour ! Ceci est un message automatique envoyé chaque jour 😊.";
+
+// Création du client WhatsApp
+const client = new Client({
+    authStrategy: new LocalAuth(), // Garde la session active
+    puppeteer: { headless: true } // Exécute Chrome en arrière-plan
+});
+
+// Afficher le QR code pour la première connexion
+client.on("qr", (qr) => {
+    console.log("Scannez ce QR code avec votre téléphone WhatsApp:");
+    qrcode.generate(qr, { small: true });
+});
+
+// Confirmer la connexion
+client.on("ready", () => {
+    console.log("✅ Bot WhatsApp est prêt !");
+    
+    // Programmer l'envoi des messages tous les jours à 8h00
+    cron.schedule("0 8 * * *", () => {
+        envoyerMessages();
+    }, {
+        timezone: "Europe/Paris" // Modifier selon ton fuseau horaire
+    });
+});
+
+// Fonction pour envoyer les messages
+function envoyerMessages() {
+    console.log("📤 Envoi des messages...");
+    contacts.forEach((numero) => {
+        client.sendMessage(numero + "@c.us", message)
+            .then(() => console.log(`✅ Message envoyé à ${numero}`))
+            .catch(err => console.error(`❌ Erreur envoi à ${numero}:`, err));
+    });
+}
+
+// Démarrer le bot
+client.initialize();
